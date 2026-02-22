@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Hypertension Risk Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #1e88e5;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            color: #0d47a1;
+            border-bottom: 3px solid #1e88e5;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .tabs {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: #e3f2fd;
+            border: 2px solid #0d47a1;
+            border-radius: 50px;
+            font-weight: bold;
+            color: #0d47a1;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .tab-btn.active {
+            background: #0d47a1;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #0d47a1;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #90caf9;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        button {
+            background: #0d47a1;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 15px 0;
+            box-shadow: 0 4px 0 #002171;
+        }
+        
+        button:hover {
+            background: #1e88e5;
+        }
+        
+        hr {
+            border: 2px solid #1e88e5;
+            margin: 25px 0;
+        }
+        
+        .result-box {
+            border: 3px solid #0d47a1;
+            padding: 20px;
+            border-radius: 15px;
+            background: #e3f2fd;
+            display: none;
+        }
+        
+        .result-section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 6px solid #1e88e5;
+            margin-bottom: 20px;
+        }
+        
+        .result-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #0d47a1;
+            border-bottom: 2px solid #bbdefb;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        
+        ul {
+            padding-left: 25px;
+        }
+        
+        li {
+            margin-bottom: 6px;
+            color: #0d47a1;
+        }
+        
+        .stats-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #0d47a1;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            color: #0d47a1;
+            margin-top: 20px;
+        }
+        
+        .message {
+            color: #0d47a1;
+            font-weight: bold;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .user-info {
+            background: #0d47a1;
+            color: white;
+            padding: 10px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- Login/Registration Tabs -->
+        <div id="authSection">
+            <h1>🔵 AI HYPERTENSION RISK CHECKER</h1>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('login')">LOGIN</button>
+                <button class="tab-btn" onclick="showTab('register')">REGISTER</button>
+            </div>
+            
+            <!-- Login Tab -->
+            <div id="loginTab" class="tab-content active">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password">
+                </div>
+                <button onclick="login()">LOGIN</button>
+                <div id="loginMessage" class="message"></div>
+            </div>
+            
+            <!-- Register Tab -->
+            <div id="registerTab" class="tab-content">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" placeholder="Enter full name">
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Choose password">
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" id="regAge" placeholder="Enter age">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="regGender">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <button onclick="register()">REGISTER</button>
+                <div id="registerMessage" class="message"></div>
+            </div>
+        </div>
+        
+        <!-- Main App Section (shown after login) -->
+        <div id="mainApp" style="display: none;">
+            <div class="user-info" id="userInfo"></div>
+            
+            <h2>🔵 HEALTH ASSESSMENT</h2>
+            
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" value="">
+            </div>
+            
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="age" value="">
+            </div>
+            
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Salt Intake</label>
+                <select id="salt">
+                    <option value="Low">Low</option>
+                    <option value="Moderate" selected>Moderate</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Exercise (hours per week)</label>
+                <input type="number" id="exercise" value="3">
+            </div>
+            
+            <div class="form-group">
+                <label>Sleep (hours per night)</label>
+                <input type="number" id="sleep" value="7">
+            </div>
+            
+            <div class="form-group">
+                <label>Symptoms</label>
+                <textarea id="symptoms" rows="2">Occasional headaches</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Family History</label>
+                <textarea id="history" rows="2">Father has hypertension</textarea>
+            </div>
+          <div style="background: #e3f2fd; padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #0d47a1;">
+    <h3 style="margin-top: 0; color: #0d47a1; border-bottom: 2px solid #1e88e5; padding-bottom: 10px;">🩺 CURRENT BLOOD PRESSURE</h3>
+    
+    <div style="display: flex; gap: 15px; align-items: center; margin: 15px 0;">
+        <div style="flex: 1; text-align: center;">
+            <label style="font-size: 14px;">SYSTOLIC (TOP)</label>
+            <input type="number" id="bpSystolic" value="120" style="width: 100%; padding: 12px; font-size: 20px; text-align: center; border: 2px solid #0d47a1;">
+        </div>
+        
+        <span style="font-size: 40px; font-weight: bold; color: #0d47a1;">/</span>
+        
+        <div style="flex: 1; text-align: center;">
+            <label style="font-size: 14px;">DIASTOLIC (BOTTOM)</label>
+            <input type="number" id="bpDiastolic" value="80" style="width: 100%; padding: 12px; font-size: 20px; text-align: center; border: 2px solid #0d47a1;">
+        </div>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; margin-top: 10px; padding: 10px; background: white; border-radius: 8px;">
+        <span style="color: green;">✓ Normal: 120/80</span>
+        <span style="color: orange;">⚠️ High: 140/90</span>
+        <span style="color: red;">🔴 Emergency: 180/120</span>
+    </div>
+    
+    <p style="font-size: 13px; color: #666; margin-top: 10px; text-align: center;">
+        Enter your current blood pressure reading to include in risk assessment
+    </p>
+</div>
+            
+            <button onclick="analyzeRisk()">🔵 ANALYZE HYPERTENSION RISK</button>
+            
+            <!-- Stats Section -->
+            <div class="stats-box">
+                <h3>📊 YOUR ACTIVITY STATS</h3>
+                <p><strong>Total Assessments:</strong> <span id="totalAssessments">0</span></p>
+                <p><strong>Last Assessment:</strong> <span id="lastAssessment">Never</span></p>
+                <p><strong>Average Risk Score:</strong> <span id="avgScore">0</span>/10</p>
+                <button onclick="logout()" style="background: #c62828; box-shadow: 0 4px 0 #8b0000; margin-top: 10px;">LOGOUT</button>
+            </div>
+            
+            <hr>
+            
+            <!-- Results Section -->
+            <div class="result-box" id="resultBox">
+                <div class="result-section">
+                    <div class="result-title">1. HYPERTENSION RISK LEVEL:</div>
+                    <p><strong style="font-size: 22px; color: #0d47a1;" id="riskLevel"></strong> <span style="background: #0d47a1; color: white; padding: 5px 15px; border-radius: 50px; margin-left: 15px;" id="riskScore"></span></p>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-title">2. CONTRIBUTING RISK FACTORS:</div>
+                    <ul id="factorsList"></ul>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-title">3. PREVENTATIVE LIFESTYLE RECOMMENDATIONS:</div>
+                    <ul id="recommendationsList"></ul>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-title">4. MONITORING ADVICE:</div>
+                    <ul>
+                        <li>🔵 Check blood pressure weekly</li>
+                        <li>🔵 Keep a log of your readings</li>
+                        <li>🔵 Monitor for symptoms</li>
+                    </ul>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-title">5. WHEN TO SEEK MEDICAL CARE:</div>
+                    <ul>
+                        <li>🔵 If BP > 140/90 consistently</li>
+                        <li>🔵 Severe headaches</li>
+                        <li>🔵 Chest pain</li>
+                        <li>🔵 Severe dizziness</li>
+                    </ul>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-title">6. DISCLAIMER:</div>
+                    <p>For educational purposes only. Consult a doctor.</p>
+                </div>
+            </div>
+            
+            <hr>
+            <div class="footer">
+                ⚕️ This tool does not replace professional medical advice ⚕️
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User database (localStorage)
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+        let currentUser = null;
+        let userStats = JSON.parse(localStorage.getItem('userStats')) || {};
+        
+        function showTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('loginTab').classList.add('active');
+                document.getElementById('registerTab').classList.remove('active');
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+            } else {
+                document.getElementById('registerTab').classList.add('active');
+                document.getElementById('loginTab').classList.remove('active');
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+            }
+        }
+        
+        function register() {
+            let name = document.getElementById('regName').value;
+            let username = document.getElementById('regUsername').value;
+            let password = document.getElementById('regPassword').value;
+            let age = document.getElementById('regAge').value;
+            let gender = document.getElementById('regGender').value;
+            
+            if (!name || !username || !password || !age) {
+                document.getElementById('registerMessage').innerText = 'Please fill all fields';
+                return;
+            }
+            
+            if (users[username]) {
+                document.getElementById('registerMessage').innerText = 'Username already exists';
+                return;
+            }
+            
+            users[username] = {
+                name: name,
+                password: password,
+                age: age,
+                gender: gender,
+                registered: new Date().toLocaleString()
+            };
+            
+            localStorage.setItem('users', JSON.stringify(users));
+            document.getElementById('registerMessage').innerText = 'Registration successful! Please login.';
+            
+            // Clear form
+            document.getElementById('regName').value = '';
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regAge').value = '';
+        }
+        
+        function login() {
+            let username = document.getElementById('loginUsername').value;
+            let password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                document.getElementById('loginMessage').innerText = 'Please enter username and password';
+                return;
+            }
+            
+            if (users[username] && users[username].password === password) {
+                currentUser = username;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                
+                // Load user data
+                document.getElementById('name').value = users[username].name;
+                document.getElementById('age').value = users[username].age;
+                document.getElementById('gender').value = users[username].gender;
+                document.getElementById('userInfo').innerHTML = `👤 Welcome, ${users[username].name}!`;
+                
+                // Load stats
+                updateStats();
+            } else {
+                document.getElementById('loginMessage').innerText = 'Invalid username or password';
+            }
+        }
+        
+        function logout() {
+            currentUser = null;
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('resultBox').style.display = 'none';
+        }
+        
+        function analyzeRisk() {
+            if (!currentUser) return;
+            
+            let age = parseInt(document.getElementById('age').value) || 0;
+            let salt = document.getElementById('salt').value;
+            let exercise = parseFloat(document.getElementById('exercise').value) || 0;
+            let sleep = parseFloat(document.getElementById('sleep').value) || 0;
+            let symptoms = document.getElementById('symptoms').value.toLowerCase();
+            let history = document.getElementById('history').value.toLowerCase();
+            
+            let score = 0;
+            if (age > 50) score++;
+            if (age > 60) score++;
+            if (salt === 'High') score += 2;
+            if (salt === 'Moderate') score++;
+            if (exercise < 2.5) score++;
+            if (sleep < 6 || sleep > 9) score++;
+            if (symptoms.includes('headache')) score++;
+            if (symptoms.includes('dizzy')) score++;
+            if (history.includes('father') || history.includes('mother')) score++;
+            
+            let risk = "LOW";
+            if (score > 3 && score <= 6) risk = "MODERATE";
+            if (score > 6) risk = "HIGH";
+            
+            // Save assessment to stats
+            if (!userStats[currentUser]) {
+                userStats[currentUser] = {
+                    assessments: [],
+                    totalScore: 0,
+                    count: 0
+                };
+            }
+            
+            userStats[currentUser].assessments.push({
+                date: new Date().toLocaleString(),
+                score: score,
+                risk: risk
+            });
+            userStats[currentUser].totalScore += score;
+            userStats[currentUser].count++;
+            
+            localStorage.setItem('userStats', JSON.stringify(userStats));
+            
+            // Update display
+            document.getElementById('riskLevel').innerHTML = risk + " RISK";
+            document.getElementById('riskScore').innerHTML = "Score: " + score + "/10";
+            
+            let factorsHTML = "";
+            factorsHTML += "<li><strong>Age:</strong> " + age + " years</li>";
+            factorsHTML += "<li><strong>Salt:</strong> " + salt + "</li>";
+            factorsHTML += "<li><strong>Exercise:</strong> " + exercise + " hrs/week</li>";
+            factorsHTML += "<li><strong>Sleep:</strong> " + sleep + " hrs/night</li>";
+            factorsHTML += "<li><strong>Symptoms:</strong> " + (symptoms || 'None') + "</li>";
+            factorsHTML += "<li><strong>Family history:</strong> " + (history || 'None') + "</li>";
+            document.getElementById('factorsList').innerHTML = factorsHTML;
+            
+            let recommendationsHTML = "";
+            if (salt === 'High') recommendationsHTML += "<li>🔵 Reduce salt intake</li>";
+            if (exercise < 2.5) recommendationsHTML += "<li>🔵 Increase exercise to 150 min/week</li>";
+            if (sleep < 6) recommendationsHTML += "<li>🔵 Aim for 7-8 hours sleep</li>";
+            if (sleep > 9) recommendationsHTML += "<li>🔵 Try to get 7-8 hours sleep</li>";
+            recommendationsHTML += "<li>🔵 Eat balanced diet</li>";
+            recommendationsHTML += "<li>🔵 Manage stress</li>";
+            recommendationsHTML += "<li>🔵 Limit alcohol</li>";
+            document.getElementById('recommendationsList').innerHTML = recommendationsHTML;
+            
+            document.getElementById('resultBox').style.display = 'block';
+            updateStats();
+        }
+        
+        function updateStats() {
+            if (!currentUser || !userStats[currentUser]) return;
+            
+            let stats = userStats[currentUser];
+            let avg = stats.count > 0 ? (stats.totalScore / stats.count).toFixed(1) : 0;
+            
+            document.getElementById('totalAssessments').innerText = stats.count;
+            document.getElementById('lastAssessment').innerText = stats.count > 0 ? stats.assessments[stats.assessments.length - 1].date : 'Never';
+            document.getElementById('avgScore').innerText = avg;
+        }
+    </script>
+</body>
+</html>
