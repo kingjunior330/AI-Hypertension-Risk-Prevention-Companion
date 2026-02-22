@@ -173,7 +173,7 @@
     <div class="container" id="app">
         <!-- Login/Registration Tabs -->
         <div id="authSection">
-            <h1>🔵 AI HYPERTENSION RISK CHECKER</h1>
+            <h1> AI HYPERTENSION RISK CHECKER</h1>
             
             <div class="tabs">
                 <button class="tab-btn active" onclick="showTab('login')">LOGIN</button>
@@ -228,7 +228,7 @@
         <div id="mainApp" style="display: none;">
             <div class="user-info" id="userInfo"></div>
             
-            <h2>🔵 HEALTH ASSESSMENT</h2>
+            <h2> HEALTH ASSESSMENT</h2>
             
             <div class="form-group">
                 <label>Full Name</label>
@@ -295,8 +295,8 @@
     
     <div style="display: flex; justify-content: space-between; margin-top: 10px; padding: 10px; background: white; border-radius: 8px;">
         <span style="color: green;">✓ Normal: 120/80</span>
-        <span style="color: orange;">⚠️ High: 140/90</span>
-        <span style="color: red;">🔴 Emergency: 180/120</span>
+        <span style="color: orange;"> High: 140/90</span>
+        <span style="color: red;"> Emergency: 180/120</span>
     </div>
     
     <p style="font-size: 13px; color: #666; margin-top: 10px; text-align: center;">
@@ -304,7 +304,7 @@
     </p>
 </div>
             
-            <button onclick="analyzeRisk()">🔵 ANALYZE HYPERTENSION RISK</button>
+            <button onclick="analyzeRisk()"> ANALYZE HYPERTENSION RISK</button>
             
             <!-- Stats Section -->
             <div class="stats-box">
@@ -337,19 +337,19 @@
                 <div class="result-section">
                     <div class="result-title">4. MONITORING ADVICE:</div>
                     <ul>
-                        <li>🔵 Check blood pressure weekly</li>
-                        <li>🔵 Keep a log of your readings</li>
-                        <li>🔵 Monitor for symptoms</li>
+                        <li> Check blood pressure weekly</li>
+                        <li> Keep a log of your readings</li>
+                        <li> Monitor for symptoms</li>
                     </ul>
                 </div>
                 
                 <div class="result-section">
                     <div class="result-title">5. WHEN TO SEEK MEDICAL CARE:</div>
                     <ul>
-                        <li>🔵 If BP > 140/90 consistently</li>
-                        <li>🔵 Severe headaches</li>
-                        <li>🔵 Chest pain</li>
-                        <li>🔵 Severe dizziness</li>
+                        <li> If BP > 140/90 consistently</li>
+                        <li> Severe headaches</li>
+                        <li> Chest pain</li>
+                        <li> Severe dizziness</li>
                     </ul>
                 </div>
                 
@@ -515,13 +515,13 @@
             document.getElementById('factorsList').innerHTML = factorsHTML;
             
             let recommendationsHTML = "";
-            if (salt === 'High') recommendationsHTML += "<li>🔵 Reduce salt intake</li>";
-            if (exercise < 2.5) recommendationsHTML += "<li>🔵 Increase exercise to 150 min/week</li>";
-            if (sleep < 6) recommendationsHTML += "<li>🔵 Aim for 7-8 hours sleep</li>";
-            if (sleep > 9) recommendationsHTML += "<li>🔵 Try to get 7-8 hours sleep</li>";
-            recommendationsHTML += "<li>🔵 Eat balanced diet</li>";
-            recommendationsHTML += "<li>🔵 Manage stress</li>";
-            recommendationsHTML += "<li>🔵 Limit alcohol</li>";
+            if (salt === 'High') recommendationsHTML += "<li> Reduce salt intake</li>";
+            if (exercise < 2.5) recommendationsHTML += "<li> Increase exercise to 150 min/week</li>";
+            if (sleep < 6) recommendationsHTML += "<li> Aim for 7-8 hours sleep</li>";
+            if (sleep > 9) recommendationsHTML += "<li> Try to get 7-8 hours sleep</li>";
+            recommendationsHTML += "<li> Eat balanced diet</li>";
+            recommendationsHTML += "<li> Manage stress</li>";
+            recommendationsHTML += "<li> Limit alcohol</li>";
             document.getElementById('recommendationsList').innerHTML = recommendationsHTML;
             
             document.getElementById('resultBox').style.display = 'block';
